@@ -13,7 +13,7 @@ exports.getProducts = (req, res, next) => {
 };
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  console.log(
+
     Product.findById(prodId, (product) => {
       console.log(product);
       res.render('shop/product-detail', {
@@ -22,7 +22,7 @@ exports.getProduct = (req, res, next) => {
         path: '/products',
       });
     })
-  );
+
 };
 
 exports.getIndex = (req, res, next) => {
