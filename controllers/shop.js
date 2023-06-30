@@ -2,43 +2,47 @@ const Product = require('../models/product');
 const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll().then(([rows,fieldData])=>{
-    res.render('shop/products-list', {
-      prods: rows,
-      pageTitle: 'Shop',
-      path: '/',
-      hasProducts: rows.length > 0,
-      activeShop: true,
-      productCSS: true,
-    });
-
-  }).catch(err => console.log(err))
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render('shop/product-list', {
+        prods: rows,
+        pageTitle: 'All Products',
+        path: '/products',
+        hasProducts: rows.length > 0,
+        activeShop: true,
+        productCSS: true,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
 
-  Product.findById(prodId, (product) => {
-    console.log(product);
-    res.render('shop/product-detail', {
-      product: product,
-      pageTitle: product.title,
-      path: '/products',
-    });
-  });
+  Product.findById(prodId)
+    .then(([product]) => {
+      console.log(product[0])
+      res.render('shop/product-detail', {
+        product: product[0],
+        pageTitle: product[0].title,
+        path: '/products',
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll().then(([rows,fieldData])=>{
-    res.render('shop/index', {
-      prods: rows,
-      pageTitle: 'Shop',
-      path: '/',
-      hasProducts: rows.length > 0,
-      activeShop: true,
-      productCSS: true,
-    });
-
-  }).catch(err => console.log(err))
+  Product.fetchAll()
+    .then(([rows, fieldData]) => {
+      res.render('shop/index', {
+        prods: rows,
+        pageTitle: 'Shop',
+        path: '/',
+        hasProducts: rows.length > 0,
+        activeShop: true,
+        productCSS: true,
+      });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.getCart = (req, res, next) => {
