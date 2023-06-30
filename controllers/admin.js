@@ -13,7 +13,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const prodId = req.params.productId;
-  Product.findById(prodId, (product) => {
+  Product.findByPk(prodId, (product) => {
     if (!product) {
       return res.redirect('/');
     }
@@ -29,15 +29,20 @@ exports.getEditProduct = (req, res, next) => {
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
-  const description = req.body.description;
   const price = req.body.price;
-  const product = new Product(null, title, imageUrl, description, price);
-  product.save().then(()=>{
-    res.redirect('/')
-  }).then(()=>{
-
-    res.redirect('/');
-  }).catch(err=>console.log(err))
+  const description = req.body.description;
+  Product.create({
+    title: title,
+    price: price,
+    imageUrl: imageUrl,
+    description: description,
+  })
+    .then((result) => {
+      console.log('created product');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -53,8 +58,8 @@ exports.postEditProduct = (req, res, next) => {
     updatedDesc,
     updatedPrice
   );
-  updatedProduct.save()
-  res.redirect('/admin/products')
+  updatedProduct.save();
+  res.redirect('/admin/products');
 };
 
 exports.getProducts = (req, res, next) => {
@@ -67,9 +72,9 @@ exports.getProducts = (req, res, next) => {
     });
   });
 };
-exports.postDeleteProduct = (req,res,next)=>{
+exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.deleteById(prodId)
-  
-  res.redirect('/admin/products')
-}
+  Product.deleteById(prodId);
+
+  res.redirect('/admin/products');
+};
