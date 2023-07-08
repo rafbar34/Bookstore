@@ -1,16 +1,17 @@
-// const mysql = require('mysql2')
-// 
-// const pool = mysql.createPool({
-//     host:process.env.HOST,
-//     user:process.env.USER,
-//     database:process.env.DATABASE,
-//     password: process.env.PASSWORD
-// })
-// 
-// module.exports = pool.promise()
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
+const password = encodeURIComponent(process.env.MONGO_PASSWORD);
+const user = process.env.MONGO_USER;
+const restURL = process.env.MONGO_LINK;
+const url = `mongodb+srv://${user}:${password}${restURL}`;
 
-const Sequelize = require("sequelize")
+const mongoConnect = (callback) => {
+  MongoClient.connect(url)
+    .then((client) => {
+      console.log('connect');
+      callback(client);
+    })
+    .catch((err) => console.log(err));
+};
 
-const sequelize = new Sequelize(process.env.DATABASE,process.env.USER,process.env.PASSWORD,{dialect:"mysql",host:process.env.HOST})
-
-module.exports = sequelize
+module.exports = mongoConnect;
