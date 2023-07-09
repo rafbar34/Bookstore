@@ -16,23 +16,25 @@ exports.getProducts = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 exports.getProduct = (req, res, next) => {
-  Product.fetchAll()
-    .then((product) => {
-      res.render('shop/product-detail', {
-        product: product[0],
-        pageTitle: product[0].title,
-        path: '/products',
-      });
-    })
-    .catch((err) => console.log(err))
-    // Product.findByPk(prodId)
-    //   .then((product) => {
-    //     res.render('shop/product-detail', {
-    //       product: product,
-    //       pageTitle: product.title,
-    //       path: '/products',
-    //     });
-    //   })
+  const prodId = req.params.productId;
+
+  // Product.fetchAll()
+  //   .then((product) => {
+  //     res.render('shop/product-detail', {
+  //       product: product[0],
+  //       pageTitle: product[0].title,
+  //       path: '/products',
+  //     });
+  //   })
+  //   .catch((err) => console.log(err))
+    Product.findByPk(prodId)
+      .then((product) => {
+        res.render('shop/product-detail', {
+          product: product,
+          pageTitle: product.title,
+          path: '/products',
+        });
+      })
     .catch((err) => console.log(err));
 };
 
