@@ -18,6 +18,19 @@ class Product {
       })
       .catch((err) => console.log(err));
   }
+  static fetchAll() {
+    const db = getDb();
+    return db
+      .collection('products')
+      .find()
+      .toArray()
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 }
 
 // const Product = sequelize.define('product', {

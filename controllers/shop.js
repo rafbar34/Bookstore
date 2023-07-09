@@ -1,8 +1,8 @@
 const Product = require('../models/product');
-const Order = require('../models/order');
+// const Order = require('../models/order');
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((product) => {
       res.render('shop/product-list', {
         prods: product,
@@ -16,8 +16,7 @@ exports.getProducts = (req, res, next) => {
     .catch((err) => console.log(err));
 };
 exports.getProduct = (req, res, next) => {
-  const prodId = req.params.productId;
-  Product.findAll({where: {id: prodId}})
+  Product.fetchAll()
     .then((product) => {
       res.render('shop/product-detail', {
         product: product[0],
@@ -38,7 +37,7 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((product) => {
       res.render('shop/index', {
         prods: product,
@@ -171,21 +170,23 @@ exports.postOrder = (req, res, next) => {
         .catch((err) => console.log(err));
     })
     .then((res) => {
-      fetchedCart.setProduct(null)
-    }).then(res=>{
+      fetchedCart.setProduct(null);
+    })
+    .then((res) => {
       res.redirect('/orders');
     })
     .catch((err) => console.log(err));
 };
 
 exports.getOrders = (req, res, next) => {
- 
- req.user.getOrders({include:['products']}).then(orders=>{
-   res.render('shop/orders', {
-     path: '/orders',
-     pageTitle: 'orders',
-     orders:orders
-   });
-
- }).catch(err=>console.log(err))
+  req.user
+    .getOrders({include: ['products']})
+    .then((orders) => {
+      res.render('shop/orders', {
+        path: '/orders',
+        pageTitle: 'orders',
+        orders: orders,
+      });
+    })
+    .catch((err) => console.log(err));
 };
